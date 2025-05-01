@@ -8,10 +8,17 @@ class Controller:
         # the model, which implements the logic of the program and holds the data
         self._model = model
 
-    def handle_hello(self, e):
-        name = self._view.txt_name.value
-        if name is None or name == "":
-            self._view.create_alert("Inserire il nome")
+    def handle_flights(self, e):
+        dist = self._view.txt_distance.value
+        self._view.txt_result.controls.clear()
+        if dist is None or dist == "":
+            self._view.create_alert("Inserire la distanza percorsa")
             return
-        self._view.txt_result.controls.append(ft.Text(f"Hello, {name}!"))
+        self._view.txt_result.controls.append(ft.Text(f"La distanza minima percorsa è {dist} miglia"))
+        self._model.buildGraph(dist)
+        self._view.txt_result.controls.append(ft.Text(f"Il grafo contiene {self._model.getNumNodi()} nodi"))
+        self._view.txt_result.controls.append(ft.Text(f"Il grafo contiene {self._model.getNumArchi()} archi"))
+        edges = self._model.getRotte()
+        for edge in edges:
+            self._view.txt_result.controls.append(ft.Text(edge))
         self._view.update_page()
